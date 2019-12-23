@@ -74,18 +74,22 @@ void loop()
         {
           ledL=-ledL;
           analogWrite(lb,ledL);
+          digitalWrite(lf, LOW);
         }
         else
         {
           analogWrite(lf,ledL);
+          digitalWrite(lb, LOW);
         }
         if(ledR<0)
         {
           ledR=-ledR;
           analogWrite(rb,ledR);
+          digitalWrite(rf, LOW);
         }
         else
         {
           analogWrite(rf,ledR);
+          digitalWrite(rb, LOW);
         }
     }
