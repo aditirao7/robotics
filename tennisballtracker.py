@@ -46,9 +46,9 @@ while(1):
     mask = cv2.inRange(hsv, thresh1, thresh2)
 
     kernel = np.ones((5, 5), np.uint8)
-    mask=cv2.erode(mask,kernel,iterations = 1)
-    mask=cv2.dilate(mask, kernel, iterations=3)
-    mask = cv2.erode(mask, kernel, iterations=2)
+    mask = cv2.erode(mask, kernel, iterations=1)
+    mask = cv2.dilate(mask, kernel, iterations=5)
+    mask = cv2.erode(mask, kernel, iterations=3)
 
     ret, thresh = cv2.threshold(mask, 200, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -62,22 +62,31 @@ while(1):
             cY = int(M["m01"] / M["m00"])
         else:
             cX, cY = 0, 0
-        circles = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 3, 300, minRadius=0, maxRadius=0)
-        (x,y),radius =cv2.minEnclosingCircle(c)
+        (x, y), radius = cv2.minEnclosingCircle(c)
+        x = np.int(x)
+        y = np.int(y)
         radius = np.int(radius)
-        if circles is not None:
-            circles = np.uint8(np.round(circles))
-            for i in circles[0, :]:
-                areah=np.pi*(i[2])**2
-                areac=np.pi*(radius)**2
-                if areah<=(areac+1000) and areah>=(areac-1000):
-                    cv2.circle(frame, (cX, cY), i[2], (255, 0, 0), 4)
-                    #cv2.circle(res, (cX, cY), radius, (0, 0, 255), 4)
+        areac = M["m00"]
+        aream = np.pi * radius ** 2
+        area = cv2.contourArea(c)
+        hull = cv2.convexHull(c)
+        hull_area = cv2.contourArea(hull)
+        solidity = 0
+        if hull_area != 0:
+            solidity = float(area) / hull_area
+        print((x, y), '\t', (cX, cY), '\t', areac, '\t', aream, '\t', solidity)
+        if (aream > 1000):
+            if ((cX < x + 5) and (cX > x - 5) and (cY > y - 5) and (cY < y + 5) and (aream) <= (
+                    areac + 2500) and solidity > 0.95 and areac > 3000):
+                cv2.circle(res, (cX, cY), radius, (255, 0, 0), 4)
+                cv2.putText(res, "BALL", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                cv2.circle(res, (cX, cY), 3, (0, 255, 0), -1)
+                cv2.circle(res, (x, y), 3, (0, 0, 255), -1)
 
     cv2.drawContours(res, contours, -1, (0, 0, 255), 1)
 
-    cv2.imshow('res', hsv)
     cv2.imshow('mask', mask)
+    cv2.imshow('hsv', hsv)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 

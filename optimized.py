@@ -5,11 +5,11 @@ cap = cv2.VideoCapture(0)
 while(1):
 
     _, frame = cap.read()
-    frame=cv2.GaussianBlur(frame, (5,5), 0)
+    frame=cv2.GaussianBlur(frame, (3,3), 0)
     hsv =cv2.cvtColor(frame, cv2.COLOR_BGR2HLS_FULL)
 
-    greenlower = np.array([32, 40, 100])
-    greenupper = np.array([82, 255, 255])
+    greenlower = np.array([37, 66, 49])
+    greenupper = np.array([139, 255, 255])
     mask = cv2.inRange(hsv, greenlower, greenupper)
 
     kernel = np.ones((5, 5), np.uint8)
@@ -38,8 +38,6 @@ while(1):
         area = cv2.contourArea(c)
         hull = cv2.convexHull(c)
         hull_area = cv2.contourArea(hull)
-#        epsilon = 0.1 * cv2.arcLength(c, True)
-#        c = cv2.approxPolyDP(c, epsilon, True)
         solidity=0
         if hull_area!=0:
             solidity = float(area) / hull_area
