@@ -76,8 +76,7 @@ while(1):
             solidity = float(area) / hull_area
         print((x, y), '\t', (cX, cY), '\t', areac, '\t', aream, '\t', solidity)
         if (aream > 1000):
-            if ((cX < x + 5) and (cX > x - 5) and (cY > y - 5) and (cY < y + 5) and (aream) <= (
-                    areac + 2500) and solidity > 0.95 and areac > 3000):
+            if ((cX < x + 5) and (cX > x - 5) and (cY > y - 5) and (cY < y + 5) and (aream) <= (areac + 2500) and solidity > 0.95 and areac > 3000):
                 cv2.circle(res, (cX, cY), radius, (255, 0, 0), 4)
                 cv2.putText(res, "BALL", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
                 cv2.circle(res, (cX, cY), 3, (0, 255, 0), -1)

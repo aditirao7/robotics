@@ -29,6 +29,8 @@ while(1):
             cY = int(M["m01"] / M["m00"])
         else:
             cX, cY = 0, 0
+        x, y, w, h = cv2.boundingRect(c)
+        aspect_ratio = float(w) / h
         (x,y),radius =cv2.minEnclosingCircle(c)
         x= np.int(x)
         y= np.int(y)
@@ -41,9 +43,9 @@ while(1):
         solidity=0
         if hull_area!=0:
             solidity = float(area) / hull_area
-        print((x,y), '\t', (cX,cY), '\t', areac, '\t', aream, '\t', solidity)
+        print((x,y), '\t', (cX,cY), '\t', areac, '\t', aream, '\t', aspect_ratio)
         if(aream>1000):
-            if((cX<x+5) and (cX>x-5) and (cY>y-5) and (cY<y+5) and (aream)<=(areac+2500) and solidity>0.95 and areac>3000):
+            if((cX<x+5) and (cX>x-5) and (cY>y-5) and (cY<y+5) and (aream)<=(areac+2500) and aspect_ratio>0.98 and areac>3000):
                 cv2.circle(res, (cX, cY), radius, (255, 0, 0), 4)
                 cv2.putText(res, "BALL", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
                 cv2.circle(res, (cX, cY), 3, (0, 255, 0), -1)
