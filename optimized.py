@@ -8,11 +8,11 @@ while(1):
     frame=cv2.GaussianBlur(frame, (3,3), 0)
     hsv =cv2.cvtColor(frame, cv2.COLOR_BGR2HLS_FULL)
 
-    greenlower = np.array([37, 66, 49])
-    greenupper = np.array([139, 255, 255])
+    greenlower = np.array([29, 37, 63])
+    greenupper = np.array([145, 255, 255])
     mask = cv2.inRange(hsv, greenlower, greenupper)
 
-    kernel = np.ones((5, 5), np.uint8)
+    kernel = np.ones((3,3), np.uint8)
     mask=cv2.erode(mask,kernel,iterations = 1)
     mask=cv2.dilate(mask, kernel, iterations=5)
     mask = cv2.erode(mask, kernel, iterations=3)
@@ -37,23 +37,20 @@ while(1):
         radius=np.int(radius)
         areac=M["m00"]
         aream=np.pi*radius**2
-        area = cv2.contourArea(c)
-        hull = cv2.convexHull(c)
-        hull_area = cv2.contourArea(hull)
-        solidity=0
-        if hull_area!=0:
-            solidity = float(area) / hull_area
         print((x,y), '\t', (cX,cY), '\t', areac, '\t', aream, '\t', aspect_ratio)
         if(aream>1000):
-            if((cX<x+5) and (cX>x-5) and (cY>y-5) and (cY<y+5) and (aream)<=(areac+2500) and aspect_ratio>0.98 and areac>3000):
-                cv2.circle(res, (cX, cY), radius, (255, 0, 0), 4)
-                cv2.putText(res, "BALL", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-                cv2.circle(res, (cX, cY), 3, (0, 255, 0), -1)
-                cv2.circle(res, (x, y), 3, (0, 0, 255), -1)
+            if((cX<x+5) and (cX>x-5) and (cY>y-5) and (cY<y+5) and (aream)<=(areac+2500) and aspect_ratio>0.98 and areac>1000):
+                cv2.circle(frame, (cX, cY), radius, (255, 0, 0), thickness=4)
+                cv2.putText(frame,"BALL",(int(x-radius),int(y-radius)),cv2.FONT_HERSHEY_COMPLEX,0.75,(0,255,0))
+                cv2.circle(frame, (cX, cY), 3, (0, 255, 0), thickness=-1)
+                cv2.circle(frame, (x, y), 3, (0, 0, 255), thickness=-1)
+                cv2.putText(frame, "BALL DETECTED", (500, 40), cv2.FONT_HERSHEY_COMPLEX, 0.5,(0, 0, 255), thickness=2)
+
 
     cv2.drawContours(res, contours, -1, (0, 0, 255), 1)
 
-    cv2.imshow('res', res)
+    cv2.imshow('mask', res)
+    cv2.imshow('hsv', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
