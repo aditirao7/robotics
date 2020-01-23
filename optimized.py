@@ -45,7 +45,7 @@ while(1):
                 cv2.putText(frame,"BALL",(int(x-radius),int(y-radius)),cv2.FONT_HERSHEY_COMPLEX,0.75,(0,255,0))
                 cv2.circle(frame, (cX, cY), 3, (0, 255, 0), thickness=-1)
                 cv2.circle(frame, (x, y), 3, (0, 0, 255), thickness=-1)
-                cv2.putText(frame, "BALL DETECTED", (500, 40), cv2.FONT_HERSHEY_COMPLEX, 0.5,(0, 0, 255), thickness=2)
+                cv2.putText(frame, "BALL DETECTED", (250, 15), cv2.FONT_HERSHEY_COMPLEX, 0.5,(0, 0, 255), thickness=2)
 
 
     cv2.drawContours(res, contours, -1, (0, 0, 255), 1)
