@@ -13,7 +13,7 @@ while(1):
     greenupper = np.array([145, 255, 255])
     mask = cv2.inRange(hsv, greenlower, greenupper)
 
-    kernel = np.ones((3,3), np.uint8)
+    kernel = np.ones((5,5), np.uint8)
     mask=cv2.erode(mask,kernel,iterations = 1)
     mask=cv2.dilate(mask, kernel, iterations=5)
     mask = cv2.erode(mask, kernel, iterations=3)
