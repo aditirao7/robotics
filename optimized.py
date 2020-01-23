@@ -15,8 +15,8 @@ while(1):
 
     kernel = np.ones((5,5), np.uint8)
     mask=cv2.erode(mask,kernel,iterations = 1)
-    mask=cv2.dilate(mask, kernel, iterations=5)
-    mask = cv2.erode(mask, kernel, iterations=3)
+    mask=cv2.dilate(mask, kernel, iterations=2)
+    mask = cv2.erode(mask, kernel, iterations=1)
 
     ret, thresh = cv2.threshold(mask, 200, 255, 0)
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
