@@ -5,6 +5,7 @@ cap = cv2.VideoCapture(0)
 while(1):
 
     _, frame = cap.read()
+    frame = cv2.resize(frame, (400, 300), interpolation = cv2.INTER_LINEAR) 
     frame=cv2.GaussianBlur(frame, (5,5), 0)
     hsv =cv2.cvtColor(frame, cv2.COLOR_BGR2HLS_FULL)
 
