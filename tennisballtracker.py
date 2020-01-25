@@ -51,7 +51,7 @@ while(1):
     mask = cv2.erode(mask, kernel, iterations=3)
 
     ret, thresh = cv2.threshold(mask, 200, 255, 0)
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     res = cv2.bitwise_and(frame, frame, mask=mask)
     for c in contours:
         M = cv2.moments(c)
