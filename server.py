@@ -4,12 +4,18 @@ import numpy as np
 import pickle
 
 s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('', 8000))
+s.bind(('', 6000))
 s.listen(5)
-while True:
-    clt,adr = s.accept()
-    frame=cv2.imread('pixar.jpeg')
-    print(frame.shape)
+clt,adr = s.accept()
+cap = cv2.VideoCapture(0)
+while (1):
+    ret, frame = cap.read()
+    size = pickle.dumps(np.size(frame))
     frame= pickle.dumps(frame)
+    clt.sendall(size)
+    answer=clt.recv(8)
     clt.sendall(frame)
-    clt.close()
+
+cap.release()
+clt.close()
+s.close()
