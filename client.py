@@ -8,8 +8,9 @@ s.connect(('', 6000))
 while (1):
     data = []
     size=0
-    sizepacket= s.recv(8)
-    frame_size=pickle.loads(sizepacket)
+    #sizepacket= s.recv(8)
+    #frame_size=pickle.loads(sizepacket)
+    frame_size=640*480*3
     s.send(b'1')
     while size<=frame_size:
         packet = s.recv(65535)

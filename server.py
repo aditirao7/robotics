@@ -10,9 +10,9 @@ clt,adr = s.accept()
 cap = cv2.VideoCapture(0)
 while (1):
     ret, frame = cap.read()
-    size = pickle.dumps(np.size(frame))
+    #size = pickle.dumps(np.size(frame))
     frame= pickle.dumps(frame)
-    clt.sendall(size)
+    #clt.sendall(size)
     answer=clt.recv(8)
     clt.sendall(frame)
 
