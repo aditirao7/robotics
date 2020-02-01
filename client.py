@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('', 6000))
+s.connect(('', 8000))
 while (1):
     data = []
     size=0
