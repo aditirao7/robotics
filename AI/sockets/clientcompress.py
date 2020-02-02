@@ -11,16 +11,15 @@ while 1:
     size=0
     sizepacket=s.recv(8)
     frame_size=pickle.loads(sizepacket)
-    print(frame_size)
     s.send(b'1')
     while size<=frame_size:
         packet = s.recv(65535)
         if not packet: break
         data.append(packet)
         size += len(packet)
+    print(size)
     data_arr = pickle.loads(b"".join(data))
-    data_arr = cv2.imdecode(data_arr[1],cv2.IMREAD_ANYCOLOR)
-    print(data_arr.shape)
+    data_arr = cv2.imdecode(data_arr[1],cv2.IMREAD_COLOR)
     cv2.imshow('frame',data_arr)
     if(cv2.waitKey(1) & 0xFF == ord('q')):
         break
