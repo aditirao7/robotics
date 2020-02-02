@@ -19,7 +19,7 @@ while 1:
         data.append(packet)
         size += len(packet)
     data_arr = pickle.loads(b"".join(data))
-    data_arr = cv2.imdecode(data_arr[1],cv2.IMREAD_ANYCOLOR)
+    data_arr = cv2.imdecode(data_arr[1],cv2.IMREAD_COLOR)
     print(data_arr.shape)
     cv2.imshow('frame',data_arr)
     if(cv2.waitKey(1) & 0xFF == ord('q')):
