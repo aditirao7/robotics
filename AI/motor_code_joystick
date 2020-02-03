@@ -1,0 +1,47 @@
+import pygame
+
+def map(x, in_min, in_max, out_min, out_max):
+    return int((x-in_min) * (out_max-out_min) / (in_max-in_min) + out_min)
+
+pygame.init()
+print ("Joystics: ", pygame.joystick.get_count())
+my_joystick = pygame.joystick.Joystick(0)
+my_joystick.init()
+clock = pygame.time.Clock()
+
+while 1:
+    for event in pygame.event.get():
+        x=my_joystick.get_axis(0)
+        y=my_joystick.get_axis(1)
+        clock.tick(100)
+        ledR=0
+        ledL=0
+        if (y > 522):
+            ledR = map(y, 522, 1023, 0, 255)
+            ledL = map(y, 522, 1023, 0, 255)
+        elif (y < 502):
+            ledR = map(y, 502, 0, 0, -255)
+            ledL = map(y, 502, 0, 0, -255)
+        else:
+            ledR = 0
+            ledL = 0
+        if (x > 522):
+            X = map(x, 522, 1023, 0, 255);
+            ledR = ledR - X;
+            ledL = ledL + X;
+            if (ledL > 255):
+                ledL = 255
+            if (ledR < -255):
+                ledR = -255
+        elif (x < 502):
+            X = map(x, 502, 0, 0, 255);
+            ledR = ledR + X;
+            ledL = ledL - X;
+            if (ledR > 255):
+                ledR = 255
+            if (ledL < -255):
+                ledL = -255
+
+        print(ledL, '\t', ledR)
+
+pygame.quit ()
