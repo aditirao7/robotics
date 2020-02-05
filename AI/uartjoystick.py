@@ -13,9 +13,9 @@ clock = pygame.time.Clock()
 
 while 1:
     for event in pygame.event.get():
-        x=-1*my_joystick.get_axis(0)
+        x=my_joystick.get_axis(0)
         y=my_joystick.get_axis(1)
-        x=(map(x, -1, 1, -1023, 1023))
+        x=-1*(map(x, -1, 1, -1023, 1023))
         y=map(y, -1, 1, -1023, 1023)
         clock.tick(100)
         ledR=0
@@ -47,9 +47,10 @@ while 1:
                 ledL = -255
 
         print(ledL, '\t', ledR)
-        line = str(ledR)
-        line = line.encode()
-        ser.write(line)  # write a string
+        ledL = ledL.to_bytes(3, 'big', signed=True)
+        ledR = ledR.to_bytes(3, 'big', signed=True)
+        ser.write(ledL)  # write a string
+        ser.write(ledR)
+# write a string
 
 pygame.quit ()
-                                     
