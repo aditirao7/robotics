@@ -10,12 +10,7 @@ clt,adr = s.accept()
 cap = cv2.VideoCapture(0)
 while (1):
     ret, frame = cap.read()
-    #frame = cv2.resize(frame, (int(frame.shape[0] / 2), int(frame.shape[1]/ 2)))
     frame=pickle.dumps(frame)
-    #size = pickle.dumps(np.size(frame))
-    #_, frame= cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 30])
-    #print(np.size(frame))
-    #clt.sendall(size)
     answer=clt.recv(8)
     clt.sendall(frame)
 
