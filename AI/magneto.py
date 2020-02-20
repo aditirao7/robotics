@@ -34,25 +34,25 @@ def read(addr):
 try:
         while 1:
 
-        x = read(2)
-        y = read(4)
-        z = read(6)
-        print(x,y,z)
+            x = read(2)
+            y = read(4)
+            z = read(6)
+            print(x,y,z)
 
-        heading = math.atan2(y, x) + declination
+            heading = math.atan2(y, x) + declination
 
-        #Due to declination check for >360 degree
-        if(heading > 2*pi):
-               heading = heading - 2*pi
+            #Due to declination check for >360 degree
+            if(heading > 2*pi):
+                   heading = heading - 2*pi
 
-        #check for sign
-        if(heading < 0):
-                heading = heading + 2*pi
+            #check for sign
+            if(heading < 0):
+                    heading = heading + 2*pi
 
-        #convert into angle
-        heading_angle = int(heading * 180/pi)
+            #convert into angle
+            heading_angle = int(heading * 180/pi)
 
-        print ("Heading Angle = %d°" %heading_angle)
+            print ("Heading Angle = %d°" %heading_angle)
 except:
     pass
                                                                                                                                                         1,12          Top
