@@ -52,3 +52,37 @@ while True:
     lon1 = 0
     ser_bytes = ser.readline()
     ser_bytes = ser.readline()
+    decoded = ser_bytes.decode()
+    if decoded.startswith('$GPGGA'):
+        list1 = decoded.split(',')
+        lat1 = float(list1[2])/100
+        lon1 = float(list1[4]) /100
+        pointB=(lat1,lon1)
+        X = math.cos(lat2) * math.sin(lon2 - lon1)
+        Y = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(lon2 - lon1)
+        bearing= math.atan2(X, Y)
+
+        x = read(2)
+        y = read(4)
+        z = read(6)
+        heading_angle=heading(x,y)
+        angle=heading_angle-bearing
+        print(angle)
+        print("Distance:", haversine(pointA,pointB)*1000)
+        if(angle>0):
+                if (angle < 180):
+                    print("Turn right")
+                elif (angle > 180):
+                    print("Turn left")
+                elif (angle == 180):
+                    print("Face the other way")
+        if(angle<0):
+                angle=abs(angle)
+                if (angle > 180):
+                    print("Turn right")
+                elif (angle < 180):
+                    print("Turn left")
+                elif (angle == 180):
+                    print("Face the other way")
+        elif(angle == 0):
+                print("Move straight")
