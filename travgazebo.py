@@ -50,7 +50,7 @@ def listener():
                     angle=abs(angle)
                     if (angle > 179):
                        print("Turn right")
-msg.angular.z=1
+                       msg.angular.z=1
                     elif (angle < 181):
                        print("Turn left")
                        msg.angular.z=-1
