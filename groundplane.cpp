@@ -2,42 +2,38 @@
 // PCL specific includes
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <pcl/ros/conversions.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-#include <pcl/sample_consensus/model_types.h>
-#include <pcl/sample_consensus/method_types.h>
-#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/filters/passthrough.h>
 
 ros::Publisher pub;
 
-void 
-cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
+void
+cloud_cb (const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 {
-  // Convert the sensor_msgs/PointCloud2 data to pcl/PointCloud
-  pcl::PointCloud<pcl::PointXYZ> cloud;
-  pcl::fromROSMsg (*input, cloud);
+  // Container for original & filtered data
+  pcl::PCLPointCloud2* cloud = new pcl::PCLPointCloud2;
+  pcl::PCLPointCloud2ConstPtr cloudPtr(cloud);
+  pcl::PCLPointCloud2 cloud_filtered;
 
-  pcl::ModelCoefficients coefficients;
-  pcl::PointIndices inliers;
-  // Create the segmentation object
-  pcl::SACSegmentation<pcl::PointXYZ> seg;
-  seg.setEpsAngle(  30.0f * (M_PI/180.0f) );
-  // Optional
-  seg.setOptimizeCoefficients (true);
-  // Mandatory
-  seg.setModelType (pcl::SACMODEL_PLANE);
-  seg.setMethodType (pcl::SAC_RANSAC);
-  seg.setDistanceThreshold (0.01);
+  // Convert to PCL data type
+  pcl_conversions::toPCL(*cloud_msg, *cloud);
 
-  seg.setInputCloud (cloud.makeShared ());
-  seg.segment (inliers, coefficients); 
-  
-  // Publish the model coefficients
-  pcl_msgs::ModelCoefficients ros_coefficients;
-  pcl_conversions::fromPCL(coefficients, ros_coefficients);
-  pub.publish (ros_coefficients);
+  // Perform the actual filtering
+  pcl::PassThrough<pcl::PCLPointCloud2> pass;
+  pass.setInputCloud (cloudPtr);
+  pass.setFilterFieldName ("y");
+  pass.setFilterLimits(0.0, 0.5);
+  pass.setFilterLimitsNegative(true);
+  pass.filter(cloud_filtered);
+
+  // Convert to ROS data type
+  sensor_msgs::PointCloud2 output;
+  pcl_conversions::moveFromPCL(cloud_filtered, output);
+
+  // Publish the data
+  pub.publish (output);
 }
 
 int
@@ -48,10 +44,10 @@ main (int argc, char** argv)
   ros::NodeHandle nh;
 
   // Create a ROS subscriber for the input point cloud
-  ros::Subscriber sub = nh.subscribe ("input", 1, cloud_cb);
+  ros::Subscriber sub = nh.subscribe<sensor_msgs::PointCloud2> ("input", 1, cloud_cb);
 
-  // Create a ROS publisher for the output model coefficients
-  pub = nh.advertise<pcl_msgs::ModelCoefficients> ("output", 1);
+  // Create a ROS publisher for the output point cloud
+  pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);
 
   // Spin
   ros::spin ();
