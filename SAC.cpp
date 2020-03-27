@@ -22,7 +22,13 @@ cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
   pcl::PointIndicesPtr ground (new pcl::PointIndices);
 
   // Convert to the templated PointCloud
-  pcl::fromROSMsg (*input, *cloud_filtered);
+  pcl::fromROSMsg (*input, *cloud);
+
+  // Create the filtering object
+  pcl::VoxelGrid<pcl::PointXYZ> sor;
+  sor.setInputCloud (cloud);
+  sor.setLeafSize (0.03, 0.03, 0.03);
+  sor.filter (*cloud_filtered);
 
   pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients ());
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices ());
