@@ -100,7 +100,7 @@ def stop():
 
 
 
-def listener():
+def autotrav():
     rospy.init_node('bot_yaw','bot_gps', anonymous=True,disable_signals= True) 
     rospy.Subscriber("imu", Imu, imu)
     rospy.Subscriber("fix", NavSatFix, gps)
@@ -242,4 +242,4 @@ def listener():
     rospy.spin()
 
 if __name__ == '__main__':
-    listener()
+    autotrav()
