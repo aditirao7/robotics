@@ -1,7 +1,7 @@
 # Miscellaneous Codes
 
 ## arduino_motor_code:
-   Generating PWM values for motors of a differential drive bot through a joystick using an Arduino. Contains scripts for an arduino joystick module as well as a Nintendo Wii Nunchuck which uses the I2C communication protocol.
+   Generating PWM values for motors of a differential drive bot through a joystick using an Arduino. Contains scripts for an arduino joystick module as well as a Nintendo Wii Nunchuk which uses the I2C communication protocol.
    
 ## basic_atmega:
    Basic Atmega microcontroller coding, blinking LEDs, timers, interrupts and debouncing.
